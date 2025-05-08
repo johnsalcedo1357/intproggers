@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Barcode Generator w/ Price Verifier</title>
+    <link rel="stylesheet" href="./index.css">
+</head>
+<script src="./plugins/JsBarcode.all.min.js"></script>
+<body>
+    <form id="scanproduct">
+        <input type="text" id="barcode-input" placeholder="Scan or enter barcode" />
+        <button type="submit">Scan</button>
+    </form>
+      
+    <div id="result">
+        <p id="product_name"></p>
+        <p id="product_price"></p>
+    </div>
+
+    <form id="addproduct">
+        <label for="product_name">Product Name: <input type="text" name="product_name" /></label><br>
+        <label for="product_price">Product Price: <input type="number" name="product_price" /></label><br>
+        <input type="submit" name="Add Product" />
+    </form><br>
+    Print this barcode to scan it!
+    <div id="barcode-container">
+        <svg id="barcode"></svg>
+    </div>
+      
+</body>
+<script src="./index.js"></script>
+</html>
