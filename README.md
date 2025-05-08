@@ -1,6 +1,8 @@
-dependencies:
-    "body-parser": "^2.2.0",
-    "dotenv": "^16.5.0",
-    "express": "^5.1.0",
-    "mongoose": "^8.14.1",
-    "open": "^10.1.2"
+# Dependencies:
+>body-parser
+>dotenv
+>express
+>mongoose
+>open
+
+To start: npm run dev
