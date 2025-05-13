@@ -6,7 +6,8 @@
 </head>
 <script src="./plugins/JsBarcode.all.min.js"></script>
 <body>
-    <form id="scanproduct">
+    <form id="scanproduct" class="formscan">
+        <h3>Scan your product here!</h3>
         <input type="text" id="barcode-input" placeholder="Scan or enter barcode" />
         <button type="submit">Scan</button>
     </form>
@@ -16,14 +17,30 @@
         <p id="product_price"></p>
     </div>
 
-    <form id="addproduct">
-        <label for="product_name">Product Name: <input type="text" name="product_name" /></label><br>
-        <label for="product_price">Product Price: <input type="number" name="product_price" /></label><br>
-        <input type="submit" name="Add Product" />
-    </form><br>
-    <div id="barcode-container">
+    <form id="addproduct" class="formadd">
+        <center><h3>Add A Product</h3></center>
+    <div class="form-group">
+    <label for="product_name">Product Name:</label>
+    <input type="text" name="product_name" />
+    </div>
+    <div class="form-group">
+    <label for="product_price">Product Price:</label>
+    <input type="number" name="product_price" />
+    </div>
+  <input type="submit" value="Add Product" />
+</form><br>
+    <div id="barcode-container" style="display:none;">
         <p id="text">Print this barcode to scan it!</p>
         <svg id="barcode"></svg>
+    </div>
+
+    <div id="productlist">
+        <!-- list of products from a GET endpoint that retrieves all products after the page loads -->
+         <!-- also has a button that either updates the product (displays the productlist-form using its objectId as reference for the endpoint) and deletes the product (using its objectId)-->
+    </div>
+
+    <div id="productlist-form" style="display:none;">
+        <!-- simulate a form made in js (to appear and use PATCH) to dynamically change with a PATCH endpoint -->
     </div>
       
 </body>
