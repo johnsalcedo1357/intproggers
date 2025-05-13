@@ -1,3 +1,4 @@
-#print {
-    display: none;
+#result {
+    width:100px;
+    height:140px;
 }

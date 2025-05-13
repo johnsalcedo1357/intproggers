@@ -2,11 +2,11 @@
   "name": "server",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "server.js",
   "type": "module",
   "scripts": {
     "start": "node server.js",
-    "dev": "node server.js & npx open http://localhost:3000/index.html"
+    "dev": "node dev.js & node server.js & npx open http://localhost:3000/index.html"
   },
   "keywords": [],
   "author": "",
@@ -19,6 +19,7 @@
     "open": "^10.1.2"
   },
   "dependencies": {
-    "cors": "^2.8.5"
+    "cors": "^2.8.5",
+    "nodemon": "^3.1.10"
   }
 }

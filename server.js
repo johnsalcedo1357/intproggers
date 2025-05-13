@@ -18,7 +18,7 @@ app.use(express.static('public'));
 app.use(bodyParser.json());
 
 //connect the damn thing
-mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(mongoURI)
   .then(() => console.log('Connected to MongoDB'))
   .catch((error) => console.error('Error connecting to MongoDB:', error));
 
