@@ -30,6 +30,8 @@ const connectDB = async () => {
   }
 };
 
+app.use(express.static('public'));
+
 // Routes
 app.use('/products', productRoutes);
 
