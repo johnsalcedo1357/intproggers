@@ -6,6 +6,18 @@
 </head>
 <script src="./plugins/JsBarcode.all.min.js"></script>
 <body>
+    <div id="login-container">
+        <form id="login-form">
+            <h3>Admin Login</h3>
+            <label for="username">Username:</label>
+            <input type="text" id="username" required>
+            <label for="password">Password:</label>
+            <input type="password" id="password" required>
+            <button type="submit">Login</button>
+        </form>
+        <button id="logout-btn" style="display: none;">Logout</button>
+    </div>
+
     <form id="scanproduct" class="formscan">
         <h3>Scan your product here!</h3>
         <input type="text" id="barcode-input" placeholder="Scan or enter barcode" />
@@ -19,28 +31,28 @@
 
     <form id="addproduct" class="formadd">
         <center><h3>Add A Product</h3></center>
-    <div class="form-group">
-    <label for="product_name">Product Name:</label>
-    <input type="text" name="product_name" />
-    </div>
-    <div class="form-group">
-    <label for="product_price">Product Price:</label>
-    <input type="number" name="product_price" />
-    </div>
-  <input type="submit" value="Add Product" />
-</form><br>
+        <div class="form-group">
+            <label for="product_name">Product Name:</label>
+            <input type="text" name="product_name" />
+        </div>
+        <div class="form-group">
+            <label for="product_price">Product Price:</label>
+            <input type="number" name="product_price" />
+        </div>
+        <input type="submit" value="Add Product" />
+    </form><br>
+
     <div id="barcode-container" style="display:none;">
         <p id="text">Print this barcode to scan it!</p>
         <svg id="barcode"></svg>
     </div>
 
     <div id="productlist">
-        <!-- list of products from a GET endpoint that retrieves all products after the page loads -->
-         <!-- also has a button that either updates the product (displays the productlist-form using its objectId as reference for the endpoint) and deletes the product (using its objectId)-->
+        <!-- dynamically populated -->
     </div>
 
     <div id="productlist-form" style="display:none;">
-        <!-- simulate a form made in js (to appear and use PATCH) to dynamically change with a PATCH endpoint -->
+        <!-- dynamically populated -->
     </div>
       
 </body>

@@ -2,6 +2,7 @@ import express from 'express';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import cors from 'cors';
+import userRoutes from './routes/userRoutes.js';
 import productRoutes from './route/routes.js';
 
 dotenv.config();
@@ -33,6 +34,7 @@ const connectDB = async () => {
 app.use(express.static('public'));
 
 // Routes
+app.use('/auth', userRoutes);
 app.use('/products', productRoutes);
 
 // Start Server
