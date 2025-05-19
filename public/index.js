@@ -189,3 +189,20 @@ async function deleteProduct(id) {
         console.error('Delete error:', err);
     }
 }
+
+function printBarcode() {
+const barcodeContent = document.getElementById('barcode-container').innerHTML;
+
+    const printWindow =  window.open('','','width=600,height=400');
+    printWindow.document.write(`
+    <html>
+<head>
+<title>Print Barcode</title>
+</head>
+<body>
+${barcodeContent}
+</body>
+</html>
+}`);
+printWindow.document.close();
+}
