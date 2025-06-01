@@ -30,17 +30,18 @@ export const findall = async (req,res) => {
 
 export const add = async (req, res) => {
   try {
-    const { product_name, product_price } = req.body;
+    const { product_name, product_price, barcode } = req.body;
 
-    if (!product_name || !product_price) {
-      return res.status(400).json({ error: "Product name and price are required." });
+    if (!product_name || !product_price || !barcode) {
+      return res.status(400).json({ error: "All fields are required." });
     }
 
-    const newProduct = new products({
-      product_name,
-      product_price,
-    });
+    const existing = await products.findOne({ barcode });
+    if (existing) {
+      return res.status(409).json({ error: "Barcode already exists." });
+    }
 
+    const newProduct = new products({ product_name, product_price, barcode });
     const savedProduct = await newProduct.save();
 
     res.status(201).json(savedProduct);

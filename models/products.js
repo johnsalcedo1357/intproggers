@@ -1,12 +1,18 @@
-import mongoose from 'mongoose'
+import mongoose from 'mongoose';
 
 const productSchema = new mongoose.Schema({
     product_name: {
-        type: String
+        type: String,
+        required: true
     },
-
     product_price: {
-        type: Number
+        type: Number,
+        required: true
+    },
+    barcode: {
+        type: String,
+        required: true,
+        unique: true
     }
 });
 

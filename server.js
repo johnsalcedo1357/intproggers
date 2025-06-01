@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import userRoutes from './route/userRoutes.js';
 import productRoutes from './route/productRoutes.js';
+import cookieParser from 'cookie-parser';
 
 dotenv.config();
 
@@ -12,7 +13,8 @@ const app = express();
 
 // Middleware
 app.use(cors());
-app.use(express.json()); // Replaces bodyParser.json()
+app.use(express.json());
+app.use(cookieParser()); //use cookies I guess
 
 // MongoDB Atlas Connection
 const connectDB = async () => {

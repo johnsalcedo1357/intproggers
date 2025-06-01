@@ -3,10 +3,17 @@ import jwt from 'jsonwebtoken';
 const JWT_SECRET = process.env.JWT_SECRET;
 
 export const authenticate = (req, res, next) => {
-  const authHeader = req.headers.authorization;
-  if (!authHeader) return res.status(401).json({ error: 'Missing token' });
+  let token;
 
-  const token = authHeader.split(' ')[1];
+  // Check both headers and cookies
+  const authHeader = req.headers.authorization;
+  if (authHeader && authHeader.startsWith('Bearer ')) {
+    token = authHeader.split(' ')[1];
+  } else if (req.cookies?.token) {
+    token = req.cookies.token;
+  }
+
+  if (!token) return res.status(401).json({ error: 'Missing token' });
 
   try {
     const decoded = jwt.verify(token, JWT_SECRET);
@@ -16,3 +23,4 @@ export const authenticate = (req, res, next) => {
     return res.status(401).json({ error: 'Invalid token' });
   }
 };
+

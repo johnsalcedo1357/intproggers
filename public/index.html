@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Barcode Generator w/ Price Verifier</title>
+    <title>Price Verifier</title>
     <link rel="stylesheet" href="./index.css">
 </head>
 <script src="./plugins/JsBarcode.all.min.js"></script>
@@ -29,30 +29,7 @@
         <p id="product_price"></p>
     </div>
 
-    <form id="addproduct" class="formadd">
-        <center><h3>Add A Product</h3></center>
-        <div class="form-group">
-            <label for="product_name">Product Name:</label>
-            <input type="text" name="product_name" />
-        </div>
-        <div class="form-group">
-            <label for="product_price">Product Price:</label>
-            <input type="number" name="product_price" />
-        </div>
-        <input type="submit" value="Add Product" />
-    </form><br>
-
-    <div id="barcode-container" style="display:none;">
-        <p id="text">Print this barcode to scan it!</p>
-        <svg id="barcode"></svg>
-    </div>
-    <button onclick="printBarcode()">Print it now!</button>
-
     <div id="productlist">
-        <!-- dynamically populated -->
-    </div>
-
-    <div id="productlist-form" style="display:none;">
         <!-- dynamically populated -->
     </div>
       
