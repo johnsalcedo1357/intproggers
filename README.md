@@ -1,2 +1,2 @@
 #Dependencies:
->body-parser dotenv express mongoose open
+>body-parser dotenv express mongoose open cookie-parser bcryptjs
