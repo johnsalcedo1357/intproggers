@@ -146,7 +146,7 @@ document.getElementById('addproduct')?.addEventListener('submit', async function
 
         if (res.ok) {
             const data = await res.json();
-            JsBarcode("#barcode", barcode, { format: "CODE128", width: 2, height: 100, displayValue: true });
+            JsBarcode("#barcode", barcode, { format: "EAN13", width: 2, height: 100, displayValue: true });
             document.getElementById('barcode-container').style.display = 'block';
             document.getElementById('addproduct').reset();
             loadProducts();

@@ -1,22 +1,22 @@
 import products from '../models/products.js'
 import mongoose from 'mongoose'
 
-export const scan = async (req,res) => {
+export const scan = async (req, res) => {
     const { barcode } = req.params;
 
     try {
-        const objectId = new mongoose.Types.ObjectId(barcode);;
-        const product = await products.findById(objectId);
+        const product = await products.findOne({ barcode });
 
-        if(!product) {
+        if (!product) {
             return res.status(404).json({ error: "Product not found." });
         }
+
         res.status(200).json(product);
     } catch (error) {
         console.error("Scan error:", error);
         res.status(500).json({ error: "Server error while scanning." });
     }
-}
+};
 
 export const findall = async (req,res) => {
     try {
