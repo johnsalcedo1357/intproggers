@@ -18,6 +18,23 @@ export const scan = async (req, res) => {
     }
 };
 
+export const checkbc = async (req, res) => {
+  const { barcode } = req.query;
+
+  try {
+    const existingProduct = await products.findOne({ barcode });
+
+    if (existingProduct) {
+      return res.status(200).json({ exists: true });
+    } else {
+      return res.status(404).json({ error: 'Product not found.' });
+    }
+  } catch (err) {
+    console.error('Error checking barcode:', err);
+    res.status(500).json({ error: 'Server error' });
+  }
+};
+
 export const findall = async (req,res) => {
     try {
         const product = await products.find();
