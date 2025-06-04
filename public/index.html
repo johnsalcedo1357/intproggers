@@ -2,33 +2,39 @@
 <html lang="en">
 <head>
     <title>Price Verifier</title>
-    <link rel="stylesheet" href="./index.css">
 </head>
 <script src="./plugins/JsBarcode.all.min.js"></script>
 <style>
     /* Base styling */
     * {
-      box-sizing: border-box;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
 
+    html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
     body {
       margin: 0;
-      padding: 20px;
+      padding:0;
       background: linear-gradient(to right, #4facfe, #00f2fe);
       color: #333;
       display: flex;
-      flex-direction: column;
-      align-items: center;
+      flex-direction: row;
       min-height: 100vh;
+      overflow: hidden;
+      min-width: 100vw;
     }
 
     .top-buttons {
     display: flex;
-    justify-content: flex-end;
-    width: 100%;
-    padding: 10px 20px 0 20px;
-    gap: 10px;
+    flex-direction: column;
+    align-items: flex-end;
+    width: 20%;
+    justify-content: space-between;
+    min-height: 100%;
     }
 
 
@@ -64,14 +70,20 @@
     transform: scale(1.03);
   }
 
+  .formdiv {
+    width: 20%;
+    height:100%;
+    display: flex;
+    align-items: center;
+  }
+
     form.formscan {
+      transform: translateX(-100%);
       background: white;
       padding: 25px 30px;
-      border-radius: 15px;
+      border-bottom-right-radius: 15px;
+      border-top-right-radius: 15px;
       box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-      max-width: 500px;
-      width: 100%;
-      margin-bottom: 30px;
       text-align: center;
     }
 
@@ -115,108 +127,44 @@
 
     #result {
       background: white;
-      max-width: 500px;
-      width: 100%;
-      padding: 20px 30px;
+      padding-left: 10%;
+      padding-right: 10%;
       border-radius: 15px;
       box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-      margin-bottom: 30px;
-      min-height: 80px;
       text-align: center;
       color: #333;
       font-size: 18px;
       font-weight: 600;
     }
 
-    #productlist {
-      overflow-y: auto;
-      position: absolute;
-      left:0;
-      top:75px;
-      border-bottom-right-radius: 15px;
-      border-top-right-radius: 15px;
-      background: white;
-      height: 70vh;
-      min-width: 500px;
-      padding-left: 50px;
-      padding-right: 50px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-      color: #333;
-      font-size: 16px;
-      clip-path: inset(0 round 0 15px 15px 0); /* top-left, top-right, bottom-right, bottom-left */
+    .result-div {
+      width: 60%;
+      height:100%;
+      display:flex;
+      align-items: center;
+      justify-content: center;
     }
-
-    .top-right-buttons {
-    width: 100%;
-    max-width: 500px;
-    margin: 0 auto 20px auto;
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-    padding: 10px 0;
-  }
-
-  .top-right-buttons button,
-  .top-right-buttons a button {
-    background-color: #f44336;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    padding: 10px 20px;
-    font-weight: bold;
-    cursor: pointer;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 16px;
-    transition: background-color 0.3s ease, transform 0.3s ease;
-  }
-
-  .top-right-buttons a button {
-    background-color: #4facfe;
-  }
-
-  .top-right-buttons button:hover,
-  .top-right-buttons a button:hover {
-    transform: scale(1.03);
-  }
-
-  #logout-btn:hover {
-    background-color: #c62828;
-  }
-
-  .top-right-buttons a button:hover {
-    background-color: #00c6ff;
-  }
-  .item-div {
-  display:flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  gap:50px;
-  padding-top:10px;
-  padding-bottom:10px;
-}
   </style>
 <body>
-     <div class="top-buttons">
-  <a href="admin-login.html"><button>Login as Admin</button></a>
-  <button id="logout-btn" style="display: none;">Logout</button>
-</div>  
-
-    <form id="scanproduct" class="formscan">
+  <div class="formdiv">
+        <form id="scanproduct" class="formscan">
         <h3>Scan your product here!</h3>
         <input type="text" id="barcode-input" placeholder="Scan or enter barcode" />
         <button type="submit">Scan</button>
     </form>
-      
-    <div id="result">
-        <p id="product_name"></p>
-        <p id="product_price"></p>
+  </div>
+  <div class="result-div">
+        <div id="result" style="display: none;">
+        <h1 id="product_name"></p><br>
+        <h1 id="product_price" style="font-size:200px"></p>
     </div>
+  </div>
 
-    <div id="productlist">
-        <!-- dynamically populated -->
-    </div>
-      
+    <div class="top-buttons">
+      <a href="admin-login.html" id="login"><button>Login as Admin</button></a>
+      <a href="display.html"><button>Product List</button></a>
+      <a id="show-form"><button>Manual Scan</button></a>
+    </div>  
 </body>
 <script src="./index.js"></script>
 </html>
