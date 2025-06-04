@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product List</title>
+</head>
+<style>
+    body {
+        overflow-x: hidden;
+        background: linear-gradient(to right, #4facfe, #00f2fe);
+        display: flex;
+    }
+.product-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #f2f2f2;
+    margin-top: 20px;
+}
+
+.product-table th, .product-table td {
+    border: 1px solid #ddd;
+    background-color: #f2f2f2;
+    padding: 10px;
+    text-align: center;
+}
+
+.product-table th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+}
+
+.root {
+    display: flex;
+    align-items: center;
+    margin-left:40%;
+}
+
+.back-button {
+    position: absolute;
+  display: flex;
+  justify-content: flex-start;
+  width: 100%;
+  padding: 10px 20px 0 20px;
+}
+
+.back-button button {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-weight: bold;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 15px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.back-button button:hover {
+  background-color: #388E3C;
+  transform: scale(1.03);
+}
+</style>
+<body>
+      <div class="back-button">
+    <a href="index.html">
+      <button type="button">← Back to Home</button>
+    </a>
+  </div>
+    <div class="root">
+    <table id="productlist">
+
+    </table>
+    </div>
+</body>
+<script src="index.js"></script>
+</html>

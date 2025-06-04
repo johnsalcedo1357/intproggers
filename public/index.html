@@ -2,7 +2,6 @@
 <html lang="en">
 <head>
     <title>Price Verifier</title>
-    <link rel="stylesheet" href="./index.css">
 </head>
 <script src="./plugins/JsBarcode.all.min.js"></script>
 <style>
@@ -201,6 +200,10 @@
   <a href="admin-login.html"><button>Login as Admin</button></a>
   <button id="logout-btn" style="display: none;">Logout</button>
 </div>  
+     <div class="top-buttons">
+  <a href="display.html"><button>Product List</button></a>
+  <button id="logout-btn" style="display: none;">Logout</button>
+</div>  
 
     <form id="scanproduct" class="formscan">
         <h3>Scan your product here!</h3>
@@ -211,10 +214,6 @@
     <div id="result">
         <p id="product_name"></p>
         <p id="product_price"></p>
-    </div>
-
-    <div id="productlist">
-        <!-- dynamically populated -->
     </div>
       
 </body>
