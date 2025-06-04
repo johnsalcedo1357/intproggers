@@ -13,11 +13,10 @@
 
         body {
         margin: 0;
-        padding: 20px;
         background: linear-gradient(to right, #4facfe, #00f2fe);
         display: flex;
-        flex-direction: column;
-        align-items: center;
+        flex-direction: row;
+        justify-content: space-between;
         color: #333;
         }
 
@@ -29,6 +28,7 @@
         }
 
         #logout-btn {
+          right:10px;
         align-self: flex-end;
         margin-bottom: 20px;
         background-color: #f44336;
@@ -49,9 +49,9 @@
         padding: 30px;
         border-radius: 15px;
         box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-        max-width: 500px;
-        width: 100%;
+        width: 75%;
         margin-top: 10px;
+        margin-left:10%;
         }
 
         .form-group {
@@ -93,7 +93,6 @@
         }
 
         #barcode-container {
-        display: none;
         background: white;
         padding: 20px;
         border-radius: 15px;
@@ -101,6 +100,14 @@
         margin-top: 30px;
         box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
         color: #333;
+        }
+
+        .modal {
+          display: none;
+          position:absolute;
+          width:100vw;
+          height:100vh;
+          background-color: #00000052;
         }
 
         #productlist {
@@ -252,12 +259,18 @@
   justify-content: center;
   gap:50px;
 }
+
+.buttons {
+  width:25%;
+  display:flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap:10%;
+  padding-top:1%;
+}
     </style>
     </head>
     <body>
-
-    <button id="logout-btn">Logout</button>
-
     <form id="addproduct" class="formadd">
         <center><h3>Add A Product</h3></center>
         <div class="form-group">
@@ -275,7 +288,7 @@
         </div>
         <input type="submit" value="Add Product" />
     </form>
-
+    <div class="modal" id="modal">
     <div id="barcode-container">
         <p id="product-name-display" style="font-weight: bold; font-size: 18px; margin-bottom: 10px;"></p>
         <svg id="barcode"></svg>
@@ -283,14 +296,24 @@
         <label id="ui">Copies: <input type="number" id="copies" /></label>
         <button class="print-btn" id="ui2" onclick="printBarcode()">Print it now!</button>
     </div>
-
-    <div id="productlist">
-        <!-- Products dynamically inserted here -->
+    </div>
+    <!-- <div id="productlist">
     </div>
 
     <div id="productlist-form" style="display:none;">
-        <!-- If needed -->
-    </div>
+    </div> -->
+
+          <div class="buttons">
+        <div class="back-button">
+    <a href="index.html">
+      <button type="button">← Back to Home</button>
+    </a>
+  </div>
+     <div class="top-buttons">
+      <a href="display.html"><button>Product List</button></a>
+    </div>  
+    <button id="logout-btn">Logout</button>
+      </div>
 
     </body>
     <script src="./index.js"></script>

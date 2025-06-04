@@ -2,6 +2,11 @@ let isLoggedIn = false;
 let productname1 = '';
 let productprice1 = 0;
 let numCopies = 1;
+let formVisible = false;
+
+window.addEventListener('load', () => document.getElementById('barcode-input').focus());
+window.addEventListener('click', () => document.getElementById('barcode-input').focus());
+window.addEventListener('keydown', () => document.getElementById('barcode-input').focus());
 
 function setCookie(name, value, hours) {
     const expires = new Date(Date.now() + hours * 60 * 60 * 1000).toUTCString();
@@ -60,6 +65,12 @@ function showEditForm(id, name, price) {
             console.error('Update error:', err);
         }
     });
+}
+
+function calculateEAN13CheckDigit(code12) {
+    const digits = code12.split('').map(Number);
+    const sum = digits.reduce((acc, digit, i) => acc + digit * (i % 2 === 0 ? 1 : 3), 0);
+    return (10 - (sum % 10)) % 10;
 }
 
 function printBarcode() {
@@ -152,25 +163,40 @@ document.getElementById('addproduct')?.addEventListener('submit', async function
     e.preventDefault();
     if (!isLoggedIn) return alert("Only admins can add products.");
 
+    let rawBarcode = document.querySelector('[name="barcode"]').value.trim();
+
+    if (!/^\d{12,13}$/.test(rawBarcode)) {
+        return alert("Barcode must be 12 or 13 digits.");
+    }
+
+    // Trim to 12 and generate full 13-digit EAN13 barcode
+    const barcode12 = rawBarcode.slice(0, 12);
+    const checkDigit = calculateEAN13CheckDigit(barcode12);
+    const fullBarcode = barcode12 + checkDigit;
+
     const productName = document.querySelector('[name="product_name"]').value;
     const productPrice = document.querySelector('[name="product_price"]').value;
-    const barcode = document.querySelector('[name="barcode"]').value;
     productname1 = document.querySelector('[name="product_name"]').value;
     productprice1 = document.querySelector('[name="product_price"]').value;
+
     try {
         const res = await fetch('/products', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ product_name: productName, product_price: productPrice, barcode }),
-            credentials: 'include'
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+            body: JSON.stringify({ product_name: productName, product_price: productPrice, barcode: fullBarcode })
         });
 
         if (res.ok) {
-            const data = await res.json();
-            JsBarcode("#barcode", barcode, { format: "EAN13", width: 2, height: 100, displayValue: true });
-            document.getElementById('barcode-container').style.display = 'block';
+            JsBarcode("#barcode", fullBarcode, {
+                format: "EAN13",
+                width: 2,
+                height: 100,
+                displayValue: true,
+                text: fullBarcode
+            });
+            document.getElementById('modal').style.display = 'flex';
+            document.getElementById('modal').style.justifyContent = 'center';
             document.getElementById('addproduct').reset();
             loadProducts();
         } else {
@@ -180,6 +206,30 @@ document.getElementById('addproduct')?.addEventListener('submit', async function
     } catch (err) {
         console.error('Error adding product:', err);
     }
+});
+
+  const adminLoginBtn = document.getElementById('login');
+  if (adminLoginBtn) {
+    adminLoginBtn.addEventListener('click', (e) => {
+      if (isLoggedIn) {
+        e.preventDefault();
+        window.location.href = 'admin.html';
+      }
+    });
+  }
+
+document.getElementById('modal')?.addEventListener('click', () => {
+    document.getElementById('modal').style.display = 'none';
+})
+
+document.getElementById('show-form')?.addEventListener('click', () => {
+    document.getElementById('scanproduct').style.transition = 'transform 0.5s ease';
+  if (formVisible) {
+    document.getElementById('scanproduct').style.transform = 'translateX(-100%)';
+  } else {
+    document.getElementById('scanproduct').style.transform = 'translateX(0%)';
+  }
+  formVisible = !formVisible;
 });
 
 document.getElementById('copies')?.addEventListener('input', () => {
@@ -192,7 +242,7 @@ document.getElementById('copies')?.addEventListener('input', () => {
 document.getElementById('barcode-field')?.addEventListener('input', () => {
         clearTimeout(checkTimeout);
 
-        const barcode = document.getElementById('barcode-field').value.trim();
+        const barcode = document.getElementById('barcode-field').value;
         if (!barcode) {
             promptSpan.textContent = '';
             return;
@@ -228,6 +278,7 @@ document.getElementById('barcode-field')?.addEventListener('input', () => {
             const res = await fetch(`/products/${barcode}`);
             if (res.ok) {
                 const data = await res.json();
+                document.getElementById('result').style.display = 'block';
                 document.getElementById('product_name').textContent = `Name: ${data.product_name}`;
                 document.getElementById('product_price').textContent = `₱${data.product_price}`;
             } else {
@@ -281,40 +332,44 @@ async function loadProducts() {
         const products = data.product;
         const listContainer = document.getElementById('productlist');
         listContainer.innerHTML = '';
+
         const title = document.createElement('div');
         title.innerHTML = '<center><h1>Product List</h1></center>';
         listContainer.appendChild(title);
+
+        const table = document.createElement('table');
+        table.className = 'product-table';
+        table.innerHTML = `
+            <thead>
+                <tr>
+                    <th>Product Name</th>
+                    <th>Product Price</th>
+                    ${isLoggedIn ? '<th>Options</th>' : ''}
+                </tr>
+            </thead>
+            <tbody></tbody>
+        `;
+
+        const tbody = table.querySelector('tbody');
+
         products.forEach(product => {
-            const productDiv = document.createElement('div');
-            productDiv.innerHTML = `
-                <div class="item-div">
-                    <span><strong>${product.product_name}</strong></span>  <span>₱${product.product_price}</span>
-                    ${isLoggedIn ? `
-                        <span><button class="edit-btn" onclick="showEditForm('${product._id}', '${product.product_name}', ${product.product_price})">Edit</button>
-                        <button class="delete-btn" onclick="deleteProduct('${product._id}')">Delete</button></span>
-                    ` : ''}
-                </div>
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td><strong>${product.product_name}</strong></td>
+                <td>₱${product.product_price}</td>
+                ${isLoggedIn ? `
+                    <td>
+                        <button class="edit-btn" onclick="showEditForm('${product._id}', '${product.product_name}', ${product.product_price})">Edit</button>
+                        <button class="delete-btn" onclick="deleteProduct('${product._id}')">Delete</button>
+                    </td>
+                ` : ''}
             `;
-            listContainer.appendChild(productDiv);
+            tbody.appendChild(row);
         });
+
+        listContainer.appendChild(table);
     } catch (err) {
         console.error('Failed to load products:', err);
     }
-}
-
-function addProductToList(barcode, name, price) {
-  const container = document.getElementById("productlist");
-  const item = document.createElement("div");
-  item.className = "product-item";
-  item.innerHTML = `
-    <p><strong>Product Name:</strong> ${name}</p>
-    <p><strong>Price:</strong> ₱${parseFloat(price).toFixed(2)}</p>
-    <p><strong>Barcode:</strong> ${barcode}</p>
-    <div class="product-buttons">
-      <button class="edit-btn">Edit</button>
-      <button class="delete-btn">Delete</button>
-    </div>
-  `;
-  container.appendChild(item);
 }
 
