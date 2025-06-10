@@ -5,24 +5,44 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Product List</title>
 </head>
+<script src="./plugins/JsBarcode.all.min.js"></script>
 <style>
     body {
-        overflow-x: hidden;
+              font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         background: linear-gradient(to right, #4facfe, #00f2fe);
-        display: flex;
+    }
+
+    .modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6); 
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
     }
 .product-table {
     width: 100%;
     border-collapse: collapse;
-    background-color: #f2f2f2;
-    margin-top: 20px;
+    margin-top: 80px;
 }
 
 .product-table th, .product-table td {
-    border: 1px solid #ddd;
     background-color: #f2f2f2;
     padding: 10px;
     text-align: center;
+}
+
+th, td {
+  border-bottom: 1px solid #8c8c8c;
+  border-right: 1px solid #8c8c8c;
+}
+
+th:last-child, td:last-child {
+  border-right: none;
 }
 
 .product-table th {
@@ -30,18 +50,46 @@
     font-weight: bold;
 }
 
+
+table tr:first-child th:first-child {
+  border-top-left-radius: 0.5rem;
+}
+
+
+
+table tr:first-child th:last-child {
+  border-top-right-radius: 0.5rem;
+}
+
+
+table tr:last-child td:first-child {
+  border-bottom-left-radius: 0.5rem;
+   border-bottom: none;
+}
+
+table tr:last-child td:nth-last-child(2) {
+  border-bottom: none;
+}
+
+
+table tr:last-child td:last-child {
+  border-bottom-right-radius: 0.5rem;
+  border-bottom: none;
+}
+
 .root {
     display: flex;
     align-items: center;
-    margin-left:40%;
+    justify-content: center;
+    width: 100%;
 }
 
 .back-button {
     position: absolute;
   display: flex;
   justify-content: flex-start;
-  width: 100%;
   padding: 10px 20px 0 20px;
+  z-index:999;
 }
 
 .back-button button {
@@ -62,8 +110,101 @@
   background-color: #388E3C;
   transform: scale(1.03);
 }
+
+.print-btn {
+  margin-top: 10px; 
+  padding: 10px 20px; 
+  background: #28a745; 
+  color: white; 
+  border: none; 
+  border-radius: 5px; 
+  cursor: pointer;
+}
+
+.edit-btn {
+  margin-top: 10px; 
+  padding: 10px 20px; 
+  background: #fb8c00; 
+  color: white; 
+  border: none; 
+  border-radius: 5px; 
+  cursor: pointer;
+}
+
+.delete-btn {
+  margin-top: 10px; 
+  padding: 10px 20px; 
+  background: #f44336; 
+  color: white; 
+  border: none; 
+  border-radius: 5px; 
+  cursor: pointer;
+}
+
+        #barcode-container {
+        background: white;
+        padding: 20px;
+        border-radius: 15px;
+        text-align: center;
+        margin-top: 30px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        color: #333;
+        }
+
+          .print-btn {
+    background-color: #4caf50;
+    color: white;
+    margin-top: 15px;
+  }
+
+  .edit-btn {
+  background-color: #ff9800;
+  color: white;
+}
+
+.edit-btn:hover {
+  background-color: #fb8c00;
+  transform: scale(1.05);
+}
+
+.delete-btn {
+  background-color: #f44336;
+  color: white;
+}
+
+.delete-btn:hover {
+  background-color: #e53935;
+  transform: scale(1.05);
+}
+
+.print-btn:hover {
+  background-color: #379f3a;
+  transform: scale(1.05);
+}
+
+#search-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: transparent;
+  padding: 10px 20px;
+  display:flex;
+  justify-content: center;
+  z-index: 999;
+}
+
+#search-input {
+  width: 100%;
+  max-width: 400px;
+  padding: 10px;
+  font-size: 16px;
+}
 </style>
 <body>
+  <div id="search-container">
+  <input type="text" id="search-input" placeholder="Search for a product..." />
+</div>
       <div class="back-button">
     <a href="index.html">
       <button type="button">← Back to Home</button>
@@ -74,6 +215,17 @@
 
     </table>
     </div>
+<div id="modal" class="modal">
+    <div id="barcode-container">
+        <svg id="barcode"></svg>
+        <div id="ui" style="margin: 20px 0;">
+            <label id="ui">Copies: <input type="number" id="copies" /></label>
+        </div>
+        <button class="print-btn" id="ui2" onclick="printBarcode()">
+            Print it now!
+        </button>
+    </div>
+</div>
 </body>
 <script src="index.js"></script>
 </html>

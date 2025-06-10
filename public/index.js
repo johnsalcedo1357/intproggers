@@ -3,10 +3,36 @@ let productname1 = '';
 let productprice1 = 0;
 let numCopies = 1;
 let formVisible = false;
+let allProducts = [];
 
-window.addEventListener('load', () => document.getElementById('barcode-input').focus());
-window.addEventListener('click', () => document.getElementById('barcode-input').focus());
-window.addEventListener('keydown', () => document.getElementById('barcode-input').focus());
+function focusBarcode() {
+    const input = document.getElementById('barcode-input');
+    if (input) input.focus();
+}
+
+window.addEventListener('load', focusBarcode);
+window.addEventListener('click', focusBarcode);
+window.addEventListener('keydown', focusBarcode);
+
+function printProduct(barcode, name, price) {
+    productname1 = name;
+    productprice1 = price;
+
+    JsBarcode("#barcode", barcode, {
+        format: "EAN13",
+        width: 2,
+        height: 100,
+        displayValue: true,
+        text: barcode
+    });
+
+    const modal = document.getElementById('modal');
+    modal.style.display = 'flex';
+    modal.style.justifyContent = 'center';
+
+    const copyInput = document.getElementById('numCopiesInput');
+    if (copyInput) copyInput.value = '';
+}
 
 function setCookie(name, value, hours) {
     const expires = new Date(Date.now() + hours * 60 * 60 * 1000).toUTCString();
@@ -218,9 +244,13 @@ document.getElementById('addproduct')?.addEventListener('submit', async function
     });
   }
 
-document.getElementById('modal')?.addEventListener('click', () => {
-    document.getElementById('modal').style.display = 'none';
-})
+document.getElementById('modal')?.addEventListener('click', (event) => {
+    const modal = document.getElementById('modal');
+
+    if (event.target === modal) {
+        modal.style.display = 'none';
+    }
+});
 
 document.getElementById('show-form')?.addEventListener('click', () => {
     document.getElementById('scanproduct').style.transition = 'transform 0.5s ease';
@@ -319,6 +349,14 @@ document.getElementById('barcode-field')?.addEventListener('input', () => {
     });
 });
 
+document.getElementById('search-input')?.addEventListener('input', function () {
+    const searchTerm = this.value.toLowerCase();
+    const filtered = allProducts.filter(p =>
+        p.product_name.toLowerCase().includes(searchTerm)
+    );
+    renderProducts(filtered);
+});
+
 document.getElementById('logout-btn')?.addEventListener('click', () => {
         deleteCookie('token');
         isLoggedIn = false;
@@ -329,47 +367,48 @@ async function loadProducts() {
     try {
         const res = await fetch('/products');
         const data = await res.json();
-        const products = data.product;
-        const listContainer = document.getElementById('productlist');
-        listContainer.innerHTML = '';
-
-        const title = document.createElement('div');
-        title.innerHTML = '<center><h1>Product List</h1></center>';
-        listContainer.appendChild(title);
-
-        const table = document.createElement('table');
-        table.className = 'product-table';
-        table.innerHTML = `
-            <thead>
-                <tr>
-                    <th>Product Name</th>
-                    <th>Product Price</th>
-                    ${isLoggedIn ? '<th>Options</th>' : ''}
-                </tr>
-            </thead>
-            <tbody></tbody>
-        `;
-
-        const tbody = table.querySelector('tbody');
-
-        products.forEach(product => {
-            const row = document.createElement('tr');
-            row.innerHTML = `
-                <td><strong>${product.product_name}</strong></td>
-                <td>₱${product.product_price}</td>
-                ${isLoggedIn ? `
-                    <td>
-                        <button class="edit-btn" onclick="showEditForm('${product._id}', '${product.product_name}', ${product.product_price})">Edit</button>
-                        <button class="delete-btn" onclick="deleteProduct('${product._id}')">Delete</button>
-                    </td>
-                ` : ''}
-            `;
-            tbody.appendChild(row);
-        });
-
-        listContainer.appendChild(table);
+        allProducts = data.product;
+        renderProducts(allProducts);
     } catch (err) {
         console.error('Failed to load products:', err);
     }
+}
+
+function renderProducts(products) {
+    const listContainer = document.getElementById('productlist');
+    listContainer.innerHTML = '';
+
+    const table = document.createElement('table');
+    table.className = 'product-table';
+    table.innerHTML = `
+        <thead>
+            <tr>
+                <th>Product Name</th>
+                <th>Product Price</th>
+                ${isLoggedIn ? '<th>Options</th>' : ''}
+            </tr>
+        </thead>
+        <tbody></tbody>
+    `;
+
+    const tbody = table.querySelector('tbody');
+
+    products.forEach(product => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td><strong>${product.product_name}</strong></td>
+            <td>₱${product.product_price}</td>
+            ${isLoggedIn ? `
+                <td>
+                    <button class="edit-btn" onclick="showEditForm('${product._id}', '${product.product_name}', ${product.product_price})">Edit</button>
+                    <button class="delete-btn" onclick="deleteProduct('${product._id}')">Delete</button>
+                    <button class="print-btn" onclick="printProduct('${product.barcode}', '${product.product_name}', ${product.product_price})">Print</button>
+                </td>
+            ` : ''}
+        `;
+        tbody.appendChild(row);
+    });
+
+    listContainer.appendChild(table);
 }
 
