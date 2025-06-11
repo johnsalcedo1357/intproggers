@@ -311,6 +311,7 @@ document.getElementById('barcode-field')?.addEventListener('input', () => {
                 document.getElementById('result').style.display = 'block';
                 document.getElementById('product_name').textContent = `Name: ${data.product_name}`;
                 document.getElementById('product_price').textContent = `₱${data.product_price}`;
+                document.getElementById('barcode-input').reset();
             } else {
                 document.getElementById('product_name').textContent = '';
                 document.getElementById('product_price').textContent = '';
@@ -352,15 +353,10 @@ document.getElementById('barcode-field')?.addEventListener('input', () => {
 document.getElementById('search-input')?.addEventListener('input', function () {
     const searchTerm = this.value.toLowerCase();
     const filtered = allProducts.filter(p =>
-        p.product_name.toLowerCase().includes(searchTerm)
+        p.product_name.toLowerCase().includes(searchTerm) ||
+        (p.barcode && p.barcode.toLowerCase().includes(searchTerm))
     );
     renderProducts(filtered);
-});
-
-document.getElementById('logout-btn')?.addEventListener('click', () => {
-        deleteCookie('token');
-        isLoggedIn = false;
-        window.location.href = './index.html'; // Redirect on logout
 });
 
 async function loadProducts() {
@@ -398,6 +394,7 @@ function renderProducts(products) {
         row.innerHTML = `
             <td><strong>${product.product_name}</strong></td>
             <td>₱${product.product_price}</td>
+            <td class="hidden">${product.barcode}</td>
             ${isLoggedIn ? `
                 <td>
                     <button class="edit-btn" onclick="showEditForm('${product._id}', '${product.product_name}', ${product.product_price})">Edit</button>
