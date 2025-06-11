@@ -306,12 +306,12 @@ document.getElementById('barcode-field')?.addEventListener('input', () => {
 
         try {
             const res = await fetch(`/products/${barcode}`);
+            document.getElementById('barcode-input').value = '';
             if (res.ok) {
                 const data = await res.json();
                 document.getElementById('result').style.display = 'block';
                 document.getElementById('product_name').textContent = `Name: ${data.product_name}`;
                 document.getElementById('product_price').textContent = `₱${data.product_price}`;
-                document.getElementById('barcode-input').textContent = '';
             } else {
                 document.getElementById('product_name').textContent = '';
                 document.getElementById('product_price').textContent = '';
