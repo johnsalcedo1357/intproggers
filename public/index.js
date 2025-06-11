@@ -311,7 +311,7 @@ document.getElementById('barcode-field')?.addEventListener('input', () => {
                 document.getElementById('result').style.display = 'block';
                 document.getElementById('product_name').textContent = `Name: ${data.product_name}`;
                 document.getElementById('product_price').textContent = `₱${data.product_price}`;
-                document.getElementById('barcode-input').reset();
+                document.getElementById('barcode-input').textContent = '';
             } else {
                 document.getElementById('product_name').textContent = '';
                 document.getElementById('product_price').textContent = '';
